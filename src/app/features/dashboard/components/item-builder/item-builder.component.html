@@ -1,0 +1,24 @@
+<div class="item-builder">
+  <div class="item-builder__controls">
+    <div class="item-builder__controls__control">
+      <label for="item-name" class="cf-label cf-label--above">Name</label>
+      <input #itemName type="text" class="cf-input-text cf-input-text--small" name="item-name" placeholder="Basketball">
+    </div>
+    <div class="item-builder__controls__control">
+      <label for="item-price" class="cf-label cf-label--above">Price</label>
+      <span class="cf-input-with-icon cf-input-with-icon--left cf-input-text--small">
+        <i class="cf-icon cf-icon-dollar-sign cf-input-with-icon__i"></i>
+        <input #itemPrice type="text" name="item-price" class="cf-input-with-icon__input" placeholder="11.99">
+      </span>
+    </div>
+    <div class="item-builder__controls__control">
+      <button
+        type="button"
+        class="cf-button cf-button--alt cf-button--medium addItem"
+        [class.isInProgress]="isInProgress"
+        (click)="addNewItem(itemName.value, itemPrice.value); itemName.value = ''; itemPrice.value = '';">
+        <span>Add</span>
+      </button>
+    </div>
+  </div>
+</div>

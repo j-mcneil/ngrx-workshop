@@ -1,0 +1,9 @@
+<div class="item">
+  <div class="item__details">
+    <span class="item__details__name">{{ item.name }}</span>
+    <span class="item__details__price">{{ item.price | currency:'USD':'symbol':'1.2'}}</span>
+  </div>
+  <button type="button" class="cf-button cf-button--icon cf-button--transparent item__remove" [class.pendingRemoval]="item.isRemovalPending" (click)="removeItem(item.id)">
+    <i class="cf-icon cf-icon-trashcan"></i>
+  </button>
+</div>

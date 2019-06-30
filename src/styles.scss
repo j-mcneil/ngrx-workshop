@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@chatham/pattern-library/core';
+@import '~@chatham/pattern-library/colors';
+@import '~@chatham/pattern-library/color-utility';
+@import '~@chatham/pattern-library/icons';
+@import '~@chatham/pattern-library/cards';
+@import '~@chatham/pattern-library/typography';
+@import '~@chatham/pattern-library/notifications';
+@import '~@chatham/pattern-library/buttons';
+@import '~@chatham/pattern-library/filters';
+@import '~@chatham/pattern-library/radio-buttons';
+@import '~@chatham/pattern-library/inputs';
+@import '~@chatham/pattern-library/selects';
+@import '~@chatham/pattern-library/tooltips';
+@import '~@chatham/pattern-library/toasts';
+/* You can add global styles to this file, and also import other style files */
+
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #eeeeee;
+  font-family: Helvetica;
+}

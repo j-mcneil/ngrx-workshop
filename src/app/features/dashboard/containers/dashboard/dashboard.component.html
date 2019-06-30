@@ -1,0 +1,9 @@
+<ng-container *ngIf="!itemsLoading; else loading">
+  <div class="item-management">
+    <app-item-builder (addItem)="addItem($event)" [isInProgress]="itemAdding"></app-item-builder>
+    <app-items [items]="items" (removeItem)="removeItem($event)"></app-items>
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div>Loading...</div>
+</ng-template>

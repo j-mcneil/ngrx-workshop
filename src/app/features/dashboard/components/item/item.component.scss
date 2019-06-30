@@ -1,0 +1,50 @@
+.item {
+  margin: 5px;
+  padding : 5px;
+  border: 1px solid darkslategrey;
+  background-color: white;
+
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+
+  &__details {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    margin-right: 5px;
+
+    &__name {
+      font-weight: bold;
+    }
+
+    &__price {
+      font-weight: bold;
+      color: green;
+    }
+  }
+
+  &__remove {
+    &.pendingRemoval {
+      
+      & .cf-icon {
+        display: none;
+      }
+
+      &::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        -webkit-animation: rotate 0.8s infinite linear;
+        animation: rotate 0.8s infinite linear;
+        border: 2px solid black;
+        border-right-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        vertical-align: -1px;
+        position: relative;
+        position: relative;
+      }
+    }
+  }
+}

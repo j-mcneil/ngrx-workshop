@@ -1,0 +1,47 @@
+.item-builder {
+  padding: 5px;
+  &__controls{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 300px;
+
+    &__control {
+      & span {
+        background-color: #ffffff;
+      }
+
+      & input {
+        &::placeholder {
+          color: #AAAAAA;
+        }
+      }
+
+      & .addItem {
+        width: 66px;
+        
+        &.isInProgress {
+          & span {
+            display: none;
+          }
+
+          &::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            -webkit-animation: rotate 0.8s infinite linear;
+            animation: rotate 0.8s infinite linear;
+            border: 2px solid black;
+            border-right-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: -1px;
+            position: relative;
+            position: relative;
+          }
+        }
+      }
+    }
+  }
+}
