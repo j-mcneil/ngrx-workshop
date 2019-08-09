@@ -1,6 +1,6 @@
 <ng-container *ngIf="!(itemsLoading$ | async); else loading">
   <div class="item-management">
-    <app-item-builder (addItem)="addItem($event)" [isInProgress]="itemAdding"></app-item-builder>
+    <app-item-builder (addItem)="addItem($event)" [isInProgress]="itemAdding$ | async"></app-item-builder>
     <app-items [items]="items$ | async" (removeItem)="removeItem($event)"></app-items>
   </div>
 </ng-container>

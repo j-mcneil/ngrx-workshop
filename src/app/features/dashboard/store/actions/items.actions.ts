@@ -22,4 +22,25 @@ export class LoadItemsSuccess implements Action {
 
 type LoadItemsAction = LoadItems | LoadItemsFail | LoadItemsSuccess;
 
-export type ItemsAction = LoadItemsAction;
+export const ADD_ITEM = '[Dashboard] Add Item';
+export const ADD_ITEM_FAIL = '[Dashboard] Add Item Fail';
+export const ADD_ITEM_SUCCESS = '[Dashboard] Add Item Success';
+
+export class AddItem implements Action {
+  readonly type = ADD_ITEM;
+  constructor(public payload: { item: Item }) {}
+}
+
+export class AddItemFail implements Action {
+  readonly type = ADD_ITEM_FAIL;
+  constructor(public error: any) {}
+}
+
+export class AddItemSuccess implements Action {
+  readonly type = ADD_ITEM_SUCCESS;
+  constructor(public payload: { item: Item }) {}
+}
+
+export type AddItemAction = AddItem | AddItemFail | AddItemSuccess;
+
+export type ItemsAction = LoadItemsAction | AddItemAction;

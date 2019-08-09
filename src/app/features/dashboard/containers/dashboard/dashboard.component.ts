@@ -9,8 +9,8 @@ import { Item, ViewItem } from '../../models';
 import { NotificationService } from 'src/app/core/services';
 import { NotificationType } from 'src/app/shared/models';
 import { DashboardState } from '../../store/reducers';
-import { getItems, getItemsLoading } from '../../store/selectors';
-import { LoadItems } from '../../store';
+import { getItems, getItemsLoading, getItemAdding } from '../../store/selectors';
+import { LoadItems, AddItem } from '../../store';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,28 +22,19 @@ export class DashboardComponent implements OnInit {
   constructor(private itemService: ItemsService, private notificationService: NotificationService, private store: Store<DashboardState>) { }
   items$: Observable<ViewItem[]>;
   itemsLoading$: Observable<boolean>;
-  itemAdding = false;
+  itemAdding$: Observable<boolean>;
 
 
   ngOnInit() {
     this.itemsLoading$ = this.store.pipe(select(getItemsLoading));
     this.items$ = this.store.pipe(select(getItems));
+    this.itemAdding$ = this.store.pipe(select(getItemAdding));
 
     this.store.dispatch(new LoadItems());
   }
 
   addItem(item: Item) {
-    // this.itemAdding = true;
-    // this.itemService.addItem(item).pipe(take(1)).subscribe(
-    //   (i) => {
-    //     this.items = [...this.items, {...i, isRemovalPending: false }].sort((a, b) => a.name.localeCompare(b.name));
-    //     this.itemAdding = false;
-    //   },
-    //   error =>  {
-    //     this.notificationService.addNotification({ message: error, type: NotificationType.error })
-    //     this.itemAdding = false;
-    //   }
-    // );
+    this.store.dispatch(new AddItem({ item }));
   }
 
   removeItem(itemId: number) {

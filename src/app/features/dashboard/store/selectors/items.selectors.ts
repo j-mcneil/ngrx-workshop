@@ -33,3 +33,8 @@ export const getItemsLoadSuccess = createSelector(
   getItemsState,
   fromItems.getLoadItemsSuccess
 );
+
+export const getItemAdding = createSelector(
+  getItemsState,
+  fromItems.getItemAdding
+);
