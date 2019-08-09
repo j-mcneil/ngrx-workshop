@@ -1,13 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { ItemsService } from '../../services';
 import { Item, ViewItem } from '../../models';
-import { NotificationService } from 'src/app/core/services';
-import { NotificationType } from 'src/app/shared/models';
 import { DashboardState } from '../../store/reducers';
 import { getItems, getItemsLoading, getItemAdding } from '../../store/selectors';
 import { LoadItems, AddItem, RemoveItem } from '../../store';
@@ -19,7 +15,7 @@ import { LoadItems, AddItem, RemoveItem } from '../../store';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class DashboardComponent implements OnInit {
-  constructor(private itemService: ItemsService, private notificationService: NotificationService, private store: Store<DashboardState>) { }
+  constructor(private store: Store<DashboardState>) { }
   items$: Observable<ViewItem[]>;
   itemsLoading$: Observable<boolean>;
   itemAdding$: Observable<boolean>;

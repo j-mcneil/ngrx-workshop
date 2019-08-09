@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { environment } from 'src/environments/environment';
+import * as fromStore from './store';
 
 
 @NgModule({
@@ -21,8 +22,8 @@ import { environment } from 'src/environments/environment';
     HttpClientModule,
     AppRoutingModule,
     CoreModule,
-    StoreModule.forRoot([]),
-    EffectsModule.forRoot([]),
+    StoreModule.forRoot(fromStore.reducers, { metaReducers: fromStore.metaReducers }),
+    EffectsModule.forRoot(fromStore.effects),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [],
