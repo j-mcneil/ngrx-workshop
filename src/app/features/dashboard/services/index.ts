@@ -1,5 +1,7 @@
 import { ItemsService } from './items.service';
-
-export const services: any[] = [ItemsService];
+import { DashboardFacadeService } from './dashboard.facade.service';
+ 
+export const services: any[] = [ItemsService, DashboardFacadeService];
 
 export * from './items.service';
+export * from './dashboard.facade.service';

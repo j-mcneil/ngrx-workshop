@@ -1,26 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-
-import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { Component } from '@angular/core';
 
 import { Notification } from './shared/models';
 import * as fromStore from './store';
+import { AppFacadeService } from './core/services';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  constructor(private store: Store<fromStore.State>) {}
+export class AppComponent {
+  constructor(private appFacade: AppFacadeService) {}
 
-  notifications$: Observable<Notification[]>;
-
-  ngOnInit() {
-    this.notifications$ = this.store.pipe(select(fromStore.getNotifications));
-  }
+  notifications$ = this.appFacade.notifications$;
 
   dismissToast(notification: Notification) {
-    this.store.dispatch(new fromStore.RemoveNotification({ notification }));
+    this.appFacade.dispatch(new fromStore.RemoveNotification({ notification }));
   }
 }

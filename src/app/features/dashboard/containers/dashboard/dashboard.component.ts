@@ -1,12 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-
-import { Item, ViewItem } from '../../models';
-import { DashboardState } from '../../store/reducers';
-import { getItems, getItemsLoading, getItemAdding } from '../../store/selectors';
+import { Item } from '../../models';
 import { LoadItems, AddItem, RemoveItem } from '../../store';
+import { DashboardFacadeService } from '../../services';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,25 +11,21 @@ import { LoadItems, AddItem, RemoveItem } from '../../store';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class DashboardComponent implements OnInit {
-  constructor(private store: Store<DashboardState>) { }
-  items$: Observable<ViewItem[]>;
-  itemsLoading$: Observable<boolean>;
-  itemAdding$: Observable<boolean>;
+  constructor(private dashboardFacade: DashboardFacadeService) { }
+  items$ = this.dashboardFacade.items$;
+  itemsLoading$ = this.dashboardFacade.itemsLoading$;
+  itemAdding$ = this.dashboardFacade.itemAdding$;
 
 
   ngOnInit() {
-    this.itemsLoading$ = this.store.pipe(select(getItemsLoading));
-    this.items$ = this.store.pipe(select(getItems));
-    this.itemAdding$ = this.store.pipe(select(getItemAdding));
-
-    this.store.dispatch(new LoadItems());
+    this.dashboardFacade.dispatch(new LoadItems());
   }
 
   addItem(item: Item) {
-    this.store.dispatch(new AddItem({ item }));
+    this.dashboardFacade.dispatch(new AddItem({ item }));
   }
 
   removeItem(itemId: number) {
-    this.store.dispatch(new RemoveItem({ itemId }));
+    this.dashboardFacade.dispatch(new RemoveItem({ itemId }));
   }
 }
