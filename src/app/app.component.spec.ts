@@ -1,8 +1,18 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { of } from 'rxjs';
+import { Mock } from 'ts-mocks';
+
 import { AppComponent } from './app.component';
+import { AppFacadeService } from './core/services';
 
 describe('AppComponent', () => {
+  const mockAppFacade = new Mock<AppFacadeService>({
+    isDarkTheme$: of(false),
+    notifications$: of([]),
+  });
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -11,6 +21,12 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [ 
+        {
+          provide: AppFacadeService,
+          useValue: mockAppFacade.Object,
+        },
+      ]
     }).compileComponents();
   }));
 
@@ -18,18 +34,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'ngrx-workshop'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ngrx-workshop');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ngrx-workshop!');
   });
 });
