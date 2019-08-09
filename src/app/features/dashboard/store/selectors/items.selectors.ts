@@ -9,10 +9,12 @@ export const getItemsState = createSelector(
   (state: DashboardState) => state.items  
 );
 
-export const getAllItems = createSelector(
-  getItemsState,
-  fromItems.getItems,
-);
+export const {
+  selectIds: getItemIds,
+  selectEntities: getItemEntities,
+  selectAll: getAllItems,
+  selectTotal: getItemsTotal,
+} = fromItems.itemAdapter.getSelectors(getItemsState);
 
 export const getPendingRemoveItems = createSelector(getItemsState, fromItems.getPendingRemoveItems);
 
