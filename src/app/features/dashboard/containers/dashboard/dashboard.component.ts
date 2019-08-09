@@ -32,8 +32,8 @@ export class DashboardComponent implements OnInit {
   addItem(item: Item) {
     this.itemAdding = true;
     this.itemService.addItem(item).pipe(take(1)).subscribe(
-      () => {
-        this.items = [...this.items, {...item, isRemovalPending: false }].sort((a, b) => a.name.localeCompare(b.name));
+      (i) => {
+        this.items = [...this.items, {...i, isRemovalPending: false }].sort((a, b) => a.name.localeCompare(b.name));
         this.itemAdding = false;
       },
       error =>  {
