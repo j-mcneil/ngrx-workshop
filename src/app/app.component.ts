@@ -14,6 +14,7 @@ export class AppComponent {
   constructor(private appFacade: AppFacadeService) {}
 
   notifications$ = this.appFacade.notifications$;
+  isDarkTheme$ = this.appFacade.isDarkTheme$;
 
   dismissToast(notification: Notification) {
     this.appFacade.dispatch(new fromStore.RemoveNotification({ notification }));

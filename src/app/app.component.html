@@ -1,7 +1,9 @@
-<router-outlet></router-outlet>
-<div class="toasts" *ngIf="notifications$ | async as notifications">
-  <div *ngFor="let notification of notifications" class="toast" role="alert">
-    <p class="toast--message toast--message--error">{{ notification.message }}</p>
-    <button type="button" class="toast--close" (click)="dismissToast(notification)">x</button>
+<div class="app" [class.dark-mode]="isDarkTheme$ | async">
+  <router-outlet></router-outlet>
+  <div class="toasts" *ngIf="notifications$ | async as notifications">
+    <div *ngFor="let notification of notifications" class="toast" role="alert">
+      <p class="toast--message toast--message--error">{{ notification.message }}</p>
+      <button type="button" class="toast--close" (click)="dismissToast(notification)">x</button>
+    </div>
   </div>
 </div>

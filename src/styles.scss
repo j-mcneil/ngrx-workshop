@@ -18,7 +18,9 @@ html {
 }
 
 body {
-  background-color: #eeeeee;
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }
 
 @keyframes rotate {
@@ -30,3 +32,6 @@ body {
   }
 }
 
+.dark-mode {
+  filter: invert(100%);
+}
