@@ -13,6 +13,7 @@
         type="button"
         class="addItem"
         [class.isInProgress]="isInProgress"
+        [disabled]="isInProgress"
         (click)="addNewItem(itemName.value, itemPrice.value); itemName.value = ''; itemPrice.value = '';">
         <span>Add</span>
       </button>
