@@ -2,15 +2,11 @@ import { createEntityAdapter, EntityState, EntityAdapter } from '@ngrx/entity';
 
 import { Item } from '../../models';
 import { ItemsAction, LOAD_ITEMS, LOAD_ITEMS_FAIL, LOAD_ITEMS_SUCCESS, ADD_ITEM, ADD_ITEM_FAIL, ADD_ITEM_SUCCESS, REMOVE_ITEM, REMOVE_ITEM_FAIL, REMOVE_ITEM_SUCCESS } from '../actions/items.actions';
+import * as asyncActionState from 'src/app/shared/store/async-action-state';
 
 export interface ItemsState extends EntityState<Item> {
-  loadingItems: boolean;
-  loadItemsError: any;
-  loadItemsSuccess: boolean;
-
-  itemAdding: boolean;
-  addItemError: any;
-  addItemSuccess: boolean;
+  loadItems: asyncActionState.AsyncActionState;
+  addItem: asyncActionState.AsyncActionState;
 
   pendingRemoveItems: { [id: number]: Item };
 }
@@ -21,14 +17,8 @@ export const itemAdapter: EntityAdapter<Item> = createEntityAdapter<Item>({
 });
 
 export const initialState: ItemsState = itemAdapter.getInitialState({
-  loadingItems: false,
-  loadItemsError: null,
-  loadItemsSuccess: false,
-
-  itemAdding: false,
-  addItemError: null,
-  addItemSuccess: false,
-
+  loadItems: asyncActionState.initialState,
+  addItem: asyncActionState.initialState,
   pendingRemoveItems: {},
 });
 
@@ -38,9 +28,7 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
     case LOAD_ITEMS: {
       return itemAdapter.removeAll({
         ...state,
-        loadingItems: true,
-        loadItemsError: null,
-        loadItemsSuccess: false,
+        loadItems: asyncActionState.inProgressState,
       });
     }
 
@@ -48,8 +36,7 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
       const error = action.error;
       return {
         ...state,
-        loadingItems: false,
-        loadItemsError: error,
+        loadItems: asyncActionState.errorState(error),
       };
     }
 
@@ -57,17 +44,14 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
       const { items } = action.payload;
       return itemAdapter.addAll(items, {
         ...state,
-        loadingItems: false,
-        loadItemsSuccess: true,
+        loadItems: asyncActionState.successState,
       });
     }
 
     case ADD_ITEM: {
       return {
         ...state,
-        itemAdding: true,
-        addItemError: null,
-        addItemSuccess: false,
+        addItem: asyncActionState.inProgressState,
       };
     }
 
@@ -75,8 +59,7 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
       const error = action.error;
       return {
         ...state,
-        itemAdding: false,
-        addItemError: error,
+        addItem: asyncActionState.errorState(error),
       };
     }
 
@@ -84,8 +67,7 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
       const { item } = action.payload;
       return itemAdapter.addOne(item, {
         ...state,
-        itemAdding: false,
-        addItemSuccess: true,
+        addItem: asyncActionState.successState,
       });
     }
 
@@ -125,13 +107,5 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
 
   return state;
 }
-
-export const getItemsLoading = (state: ItemsState) => state.loadingItems;
-export const getLoadItemsError = (state: ItemsState) => state.loadItemsError;
-export const getLoadItemsSuccess = (state: ItemsState) => state.loadItemsSuccess;
-
-export const getItemAdding = (state: ItemsState) => state.itemAdding;
-export const getAddItemError = (state: ItemsState) => state.addItemError;
-export const getAddItemSuccess = (state: ItemsState) => state.addItemSuccess;
 
 export const getPendingRemoveItems = (state: ItemsState) => state.pendingRemoveItems;

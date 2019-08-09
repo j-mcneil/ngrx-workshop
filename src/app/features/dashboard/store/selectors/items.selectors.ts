@@ -3,6 +3,8 @@ import { createSelector } from '@ngrx/store';
 import { getDashboardState, DashboardState } from '../reducers';
 
 import * as fromItems from '../reducers/items.reducer';
+import * as asyncActionState from 'src/app/shared/store/async-action-state';
+
 
 export const getItemsState = createSelector(
   getDashboardState,
@@ -27,22 +29,13 @@ export const getItems = createSelector(
   }))
 );
 
-export const getItemsLoading = createSelector(
-  getItemsState,
-  fromItems.getItemsLoading
-);
+export const {
+  getInProgress: getItemsLoading,
+  getError: getItemsLoadError,
+  getSuccess: getItemsLoadSuccess,
+  getNeedsFiring: getItemsNeedLoading
+} = asyncActionState.getSelectors(getItemsState, (state: fromItems.ItemsState) => state.loadItems);
 
-export const getItemsLoadError = createSelector(
-  getItemsState,
-  fromItems.getLoadItemsError
-);
-
-export const getItemsLoadSuccess = createSelector(
-  getItemsState,
-  fromItems.getLoadItemsSuccess
-);
-
-export const getItemAdding = createSelector(
-  getItemsState,
-  fromItems.getItemAdding
-);
+export const {
+  getInProgress: getItemAdding
+} = asyncActionState.getSelectors(getItemsState, (state: fromItems.ItemsState) => state.addItem);
