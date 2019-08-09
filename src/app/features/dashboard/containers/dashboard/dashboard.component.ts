@@ -8,18 +8,13 @@ import { DashboardFacadeService } from '../../services';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   constructor(private dashboardFacade: DashboardFacadeService) { }
   items$ = this.dashboardFacade.items$;
   itemsLoading$ = this.dashboardFacade.itemsLoading$;
   itemAdding$ = this.dashboardFacade.itemAdding$;
-
-
-  ngOnInit() {
-    this.dashboardFacade.dispatch(new LoadItems());
-  }
 
   addItem(item: Item) {
     this.dashboardFacade.dispatch(new AddItem({ item }));

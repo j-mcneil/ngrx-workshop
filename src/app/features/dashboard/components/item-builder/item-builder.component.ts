@@ -1,11 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { Item } from '../../models';
 
 @Component({
   selector: 'app-item-builder',
   templateUrl: './item-builder.component.html',
-  styleUrls: ['./item-builder.component.scss']
+  styleUrls: ['./item-builder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemBuilderComponent implements OnInit {
   @Input()
