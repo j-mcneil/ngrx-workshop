@@ -1,9 +1,7 @@
 <router-outlet></router-outlet>
-<div class="cf-toasts" *ngIf="notifications$ | async as notifications">
-  <div *ngFor="let notification of notifications" class="cf-toast cf-toast--error" role="alert"><i class="cf-icon cf-icon-error"></i>
-    <p class="cf-toast__msg">{{ notification.message }}</p>
-    <button type="button" class="cf-button cf-button--icon cf-button--transparent" (click)="dismissToast(notification)">
-      <i class="cf-icon cf-icon-close"></i>
-    </button>
+<div class="toasts" *ngIf="notifications$ | async as notifications">
+  <div *ngFor="let notification of notifications" class="toast" role="alert">
+    <p class="toast--message toast--message--error">{{ notification.message }}</p>
+    <button type="button" class="toast--close" (click)="dismissToast(notification)">x</button>
   </div>
 </div>

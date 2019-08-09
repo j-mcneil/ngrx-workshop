@@ -25,9 +25,21 @@
   }
 
   &__remove {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 17px;
+    max-height: 26px;
+
+    & i {
+      font-size: 1.25em;
+      line-height: unset;
+      color:  #777777;
+    }
+
     &.pendingRemoval {
       
-      & .cf-icon {
+      & i {
         display: none;
       }
 
