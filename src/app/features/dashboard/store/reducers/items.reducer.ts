@@ -1,7 +1,7 @@
 import { createEntityAdapter, EntityState, EntityAdapter } from '@ngrx/entity';
 
 import { Item } from '../../models';
-import { ItemsAction, LOAD_ITEMS, LOAD_ITEMS_FAIL, LOAD_ITEMS_SUCCESS, ADD_ITEM, ADD_ITEM_FAIL, ADD_ITEM_SUCCESS } from '../actions/items.actions';
+import { ItemsAction, LOAD_ITEMS, LOAD_ITEMS_FAIL, LOAD_ITEMS_SUCCESS, ADD_ITEM, ADD_ITEM_FAIL, ADD_ITEM_SUCCESS, REMOVE_ITEM, REMOVE_ITEM_FAIL, REMOVE_ITEM_SUCCESS } from '../actions/items.actions';
 
 export interface ItemsState {
   loadingItems: boolean;
@@ -12,6 +12,8 @@ export interface ItemsState {
   itemAdding: boolean;
   addItemError: any;
   addItemSuccess: boolean;
+
+  pendingRemoveItems: { [id: number]: Item };
 }
 
 export const initialState: ItemsState = {
@@ -23,6 +25,8 @@ export const initialState: ItemsState = {
   itemAdding: false,
   addItemError: null,
   addItemSuccess: false,
+
+  pendingRemoveItems: {},
 }
 
 export function reducer(state: ItemsState = initialState, action: ItemsAction) : ItemsState {
@@ -83,6 +87,40 @@ export function reducer(state: ItemsState = initialState, action: ItemsAction) :
         items: [ ...state.items, item ],
       }
     }
+
+    case REMOVE_ITEM: {
+      const { itemId } = action.payload;
+      const pendingRemoveItems = {
+        ...state.pendingRemoveItems,
+        [itemId]: state.items.filter(i => i.id === itemId)[0],
+      };
+
+      return {
+        ...state,
+        pendingRemoveItems,
+      };
+    }
+
+    case REMOVE_ITEM_FAIL: {
+      const { itemId } = action.payload;
+      const { [itemId]: id, ...pendingRemoveItems } = state.pendingRemoveItems;
+
+      return {
+        ...state,
+        pendingRemoveItems
+      };
+    }
+
+    case REMOVE_ITEM_SUCCESS: {
+      const { itemId } = action.payload;
+      const { [itemId]: id, ...pendingRemoveItems } = state.pendingRemoveItems;
+
+      return {
+        ...state,
+        pendingRemoveItems,
+        items: state.items.filter(item => item.id !== itemId),
+      };
+    }
   }
 
   return state;
@@ -96,3 +134,5 @@ export const getLoadItemsSuccess = (state: ItemsState) => state.loadItemsSuccess
 export const getItemAdding = (state: ItemsState) => state.itemAdding;
 export const getAddItemError = (state: ItemsState) => state.addItemError;
 export const getAddItemSuccess = (state: ItemsState) => state.addItemSuccess;
+
+export const getPendingRemoveItems = (state: ItemsState) => state.pendingRemoveItems;

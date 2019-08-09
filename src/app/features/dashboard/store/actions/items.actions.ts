@@ -43,4 +43,25 @@ export class AddItemSuccess implements Action {
 
 export type AddItemAction = AddItem | AddItemFail | AddItemSuccess;
 
-export type ItemsAction = LoadItemsAction | AddItemAction;
+export const REMOVE_ITEM = '[Dashboard] Remove Item';
+export const REMOVE_ITEM_FAIL = '[Dashboard] Remove Item Fail';
+export const REMOVE_ITEM_SUCCESS = '[Dashboard] Remove Item Success';
+
+export class RemoveItem implements Action {
+  readonly type = REMOVE_ITEM;
+  constructor(public payload: { itemId: number }) {}
+}
+
+export class RemoveItemFail implements Action {
+  readonly type = REMOVE_ITEM_FAIL;
+  constructor(public payload: { itemId: number }, public error: any) {}
+}
+
+export class RemoveItemSuccess implements Action {
+  readonly type = REMOVE_ITEM_SUCCESS;
+  constructor(public payload: { itemId: number }) {}
+}
+
+export type RemoveItemAction = RemoveItem | RemoveItemFail | RemoveItemSuccess;
+
+export type ItemsAction = LoadItemsAction | AddItemAction | RemoveItemAction;

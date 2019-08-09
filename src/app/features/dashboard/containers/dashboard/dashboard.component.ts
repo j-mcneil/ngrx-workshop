@@ -10,7 +10,7 @@ import { NotificationService } from 'src/app/core/services';
 import { NotificationType } from 'src/app/shared/models';
 import { DashboardState } from '../../store/reducers';
 import { getItems, getItemsLoading, getItemAdding } from '../../store/selectors';
-import { LoadItems, AddItem } from '../../store';
+import { LoadItems, AddItem, RemoveItem } from '../../store';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,13 +38,6 @@ export class DashboardComponent implements OnInit {
   }
 
   removeItem(itemId: number) {
-    // this.items.filter(item => item.id === itemId).forEach(item => item.isRemovalPending = true);
-    // this.itemService.removeItem(itemId).pipe(take(1)).subscribe(
-    //   () => this.items = this.items.filter(item => item.id !== itemId),
-    //   error =>  {
-    //     this.notificationService.addNotification({ message: error, type: NotificationType.error });
-    //     this.items.filter(item => item.id === itemId).forEach(item => item.isRemovalPending = false);
-    //   }
-    // );
+    this.store.dispatch(new RemoveItem({ itemId }));
   }
 }

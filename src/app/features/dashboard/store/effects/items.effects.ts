@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { ItemsService } from '../../services/items.service';
-import { LOAD_ITEMS, LoadItemsSuccess, LoadItemsFail, ADD_ITEM, AddItem, AddItemSuccess, AddItemFail } from '../actions/items.actions';
+import { LOAD_ITEMS, LoadItemsSuccess, LoadItemsFail, ADD_ITEM, AddItem, AddItemSuccess, AddItemFail, REMOVE_ITEM, RemoveItem, RemoveItemSuccess, RemoveItemFail } from '../actions/items.actions';
 
 @Injectable()
 export class ItemsEffects {
@@ -30,4 +30,13 @@ export class ItemsEffects {
     ))
   )
 
+  @Effect()
+  removeItem$ = this.actions$.pipe(
+    ofType(REMOVE_ITEM),
+    map((action: RemoveItem) => action.payload),
+    switchMap(({ itemId }) => this.itemsService.removeItem(itemId).pipe(
+      map(itemId => new RemoveItemSuccess({ itemId })),
+      catchError(error => of(new RemoveItemFail({ itemId }, error)))
+    ))
+  )
 }

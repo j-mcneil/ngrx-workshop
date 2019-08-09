@@ -14,9 +14,15 @@ export const getAllItems = createSelector(
   fromItems.getItems,
 );
 
+export const getPendingRemoveItems = createSelector(getItemsState, fromItems.getPendingRemoveItems);
+
 export const getItems = createSelector(
   getAllItems,
-  items => items.map(item => ({ ...item, isRemovalPending: false }))
+  getPendingRemoveItems,
+  (items, pendingRemoveItems) => items.map(item => ({
+    ...item,
+    isRemovalPending: !!pendingRemoveItems[item.id]
+  }))
 );
 
 export const getItemsLoading = createSelector(
