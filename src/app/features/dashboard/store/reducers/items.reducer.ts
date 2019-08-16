@@ -1,7 +1,8 @@
+import { createReducer, on } from '@ngrx/store';
 import { createEntityAdapter, EntityState, EntityAdapter } from '@ngrx/entity';
 
 import { Item } from '../../models';
-import { ItemsAction, LOAD_ITEMS, LOAD_ITEMS_FAIL, LOAD_ITEMS_SUCCESS, ADD_ITEM, ADD_ITEM_FAIL, ADD_ITEM_SUCCESS, REMOVE_ITEM, REMOVE_ITEM_FAIL, REMOVE_ITEM_SUCCESS } from '../actions/items.actions';
+import * as itemActions from '../actions/items.actions';
 import * as asyncActionState from 'src/app/shared/store/async-action-state';
 
 export interface ItemsState extends EntityState<Item> {
@@ -22,90 +23,67 @@ export const initialState: ItemsState = itemAdapter.getInitialState({
   pendingRemoveItems: {},
 });
 
-export function reducer(state: ItemsState = initialState, action: ItemsAction) : ItemsState {
+export const reducer = createReducer(
+  initialState,
+  on(itemActions.LoadItems, state => itemAdapter.removeAll({
+    ...state,
+    loadItems: asyncActionState.inProgressState,
+  })),
   
-  switch(action.type) {
-    case LOAD_ITEMS: {
-      return itemAdapter.removeAll({
-        ...state,
-        loadItems: asyncActionState.inProgressState,
-      });
-    }
+  on(itemActions.LoadItemsFail, (state, { error }) => ({
+    ...state,
+    loadItems: asyncActionState.errorState(error),
+  })),
 
-    case LOAD_ITEMS_FAIL: {
-      const error = action.error;
-      return {
-        ...state,
-        loadItems: asyncActionState.errorState(error),
-      };
-    }
+  on(itemActions.LoadItemsSuccess, (state, { items }) => itemAdapter.addAll(items, {
+    ...state,
+    loadItems: asyncActionState.successState,
+  })),
 
-    case LOAD_ITEMS_SUCCESS: {
-      const { items } = action.payload;
-      return itemAdapter.addAll(items, {
-        ...state,
-        loadItems: asyncActionState.successState,
-      });
-    }
+  on(itemActions.AddItem, state => ({
+    ...state,
+    addItem: asyncActionState.inProgressState,
+  })),
 
-    case ADD_ITEM: {
-      return {
-        ...state,
-        addItem: asyncActionState.inProgressState,
-      };
-    }
+  on(itemActions.AddItemFail, (state, { error }) => ({
+    ...state,
+    addItem: asyncActionState.errorState(error),
+  })),
+  
+  on(itemActions.AddItemSuccess, (state, { item }) => itemAdapter.addOne(item, {
+    ...state,
+    addItem: asyncActionState.successState,
+  })),
 
-    case ADD_ITEM_FAIL: {
-      const error = action.error;
-      return {
-        ...state,
-        addItem: asyncActionState.errorState(error),
-      };
-    }
+  on(itemActions.RemoveItem, (state, { itemId }) => {
+    const pendingRemoveItems = {
+      ...state.pendingRemoveItems,
+      [itemId]: state.entities[itemId],
+    };
 
-    case ADD_ITEM_SUCCESS: {
-      const { item } = action.payload;
-      return itemAdapter.addOne(item, {
-        ...state,
-        addItem: asyncActionState.successState,
-      });
-    }
+    return {
+      ...state,
+      pendingRemoveItems,
+    };
+  }),
 
-    case REMOVE_ITEM: {
-      const { itemId } = action.payload;
-      const pendingRemoveItems = {
-        ...state.pendingRemoveItems,
-        [itemId]: state.entities[itemId],
-      };
+  on(itemActions.RemoveItemFail, (state, { itemId }) => {
+    const { [itemId]: id, ...pendingRemoveItems } = state.pendingRemoveItems;
 
-      return {
-        ...state,
-        pendingRemoveItems,
-      };
-    }
+    return {
+      ...state,
+      pendingRemoveItems
+    };
+  }),
 
-    case REMOVE_ITEM_FAIL: {
-      const { itemId } = action.payload;
-      const { [itemId]: id, ...pendingRemoveItems } = state.pendingRemoveItems;
+  on(itemActions.RemoveItemSuccess, (state, { itemId }) => {
+    const { [itemId]: item, ...pendingRemoveItems } = state.pendingRemoveItems;
 
-      return {
-        ...state,
-        pendingRemoveItems
-      };
-    }
-
-    case REMOVE_ITEM_SUCCESS: {
-      const { itemId } = action.payload;
-      const { [itemId]: item, ...pendingRemoveItems } = state.pendingRemoveItems;
-
-      return itemAdapter.removeOne(itemId, {
-        ...state,
-        pendingRemoveItems,
-      });
-    }
-  }
-
-  return state;
-}
+    return itemAdapter.removeOne(itemId, {
+      ...state,
+      pendingRemoveItems,
+    });
+  }),
+);
 
 export const getPendingRemoveItems = (state: ItemsState) => state.pendingRemoveItems;

@@ -8,9 +8,16 @@ export const getRouterState = createFeatureSelector<fromRouterStore.RouterReduce
   'routerReducer'
 );
 
+
+const {
+  selectQueryParams,    // select the current route query params
+  selectRouteParams,    // select the current route params
+  selectRouteData,      // select the current route data
+  selectUrl,            // select the current url
+} = fromRouterStore.getSelectors(getRouterState);
+
+
 export const getTheme = createSelector(
-  getRouterState,
-  router => {
-    return router && router.state && router.state.queryParams && router.state.queryParams.theme;
-  }
+  selectQueryParams,
+  queryParams => queryParams && queryParams.theme
 )

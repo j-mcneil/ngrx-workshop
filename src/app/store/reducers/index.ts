@@ -17,7 +17,7 @@ export const reducers: ActionReducerMap<State> = {
   routerReducer: fromRouter.reducer,
 };
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [ storeFreeze ] : [];
+export const metaReducers: MetaReducer<State>[] = [];
 
 export { NotificationsState } from './notifications.reducer';
 export { CustomSerializer } from './router.reducer';

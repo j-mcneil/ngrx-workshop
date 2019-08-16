@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { Store, select, Action } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, tap, switchMapTo, filter, shareReplay, map, skip, skipUntil } from 'rxjs/operators';
+import { distinctUntilChanged, tap, switchMapTo, filter, shareReplay, skipUntil } from 'rxjs/operators';
 import * as R from 'ramda';
 
-import { ViewItem } from '../models';
 import * as fromStore from '../store';
 
 
@@ -15,7 +13,7 @@ export class DashboardFacadeService {
 
   items$ = this.store.pipe(select(fromStore.getItemsNeedLoading),
     distinctUntilChanged(),
-    tap(R.when(R.identity, _ => this.dispatch(new fromStore.LoadItems()))),
+    tap(R.when(R.identity, _ => this.dispatch(fromStore.LoadItems()))),
     switchMapTo(this.store.pipe(select(fromStore.getItems))),
     skipUntil(this.store.pipe(select(fromStore.getItemsLoadSuccess), filter(R.identity))),
     shareReplay(1)

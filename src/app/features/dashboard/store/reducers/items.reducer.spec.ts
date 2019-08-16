@@ -16,7 +16,7 @@ describe('LeadReducer', () => {
   describe('LoadItems Actions', () => {
     describe('LOAD_ITEMS action', () => {
       it('should set loadItems:inProgress bit to true', () => {
-        const action = new itemsActions.LoadItems();
+        const action = itemsActions.LoadItems();
         const state = reducer(initialState, action);
 
         expect(state).toEqual({
@@ -28,7 +28,7 @@ describe('LeadReducer', () => {
 
     describe('LOAD_ITEMS_FAIL action', () => {
       it('should set loadItems: error', () => {
-        const action = new itemsActions.LoadItemsFail('error');
+        const action = itemsActions.LoadItemsFail({ error: 'error' });
         const state = reducer(initialState, action);
         expect(state).toEqual({
           ...initialState,
@@ -44,7 +44,7 @@ describe('LeadReducer', () => {
           { id: 2, name: 'Hat', price: 14.50 },
         ];
 
-        const action = new itemsActions.LoadItemsSuccess({ items });
+        const action = itemsActions.LoadItemsSuccess({ items });
         const state = reducer(initialState, action);
 
         expect(state).toEqual({
@@ -64,7 +64,7 @@ describe('LeadReducer', () => {
     describe('ADD_ITEM action', () => {
       it('should set addItem:inProgress bit to true', () => {
         const item = { id: 1, name: 'Mug', price: 4.50 };
-        const action = new itemsActions.AddItem({ item });
+        const action = itemsActions.AddItem({ item });
         const state = reducer(initialState, action);
 
         expect(state).toEqual({
@@ -76,7 +76,7 @@ describe('LeadReducer', () => {
 
     describe('ADD_ITEM_FAIL action', () => {
       it('should set addItem: error', () => {
-        const action = new itemsActions.AddItemFail('error');
+        const action = itemsActions.AddItemFail({ error: 'error' });
         const state = reducer(initialState, action);
         expect(state).toEqual({
           ...initialState,
@@ -89,7 +89,7 @@ describe('LeadReducer', () => {
       it('should set the addItem: success bit and add the item', () => {
         const item = { id: 1, name: 'Mug', price: 4.50 };
 
-        const action = new itemsActions.AddItemSuccess({ item });
+        const action = itemsActions.AddItemSuccess({ item });
         const state = reducer(initialState, action);
 
         expect(state).toEqual({
@@ -108,7 +108,7 @@ describe('LeadReducer', () => {
     describe('REMOVE_ITEM action', () => {
       it('should add the item to pendingRemoveItems', () => {
         const item = { id: 1, name: 'Mug', price: 4.50 };
-        const action = new itemsActions.RemoveItem({ itemId: item.id });
+        const action = itemsActions.RemoveItem({ itemId: item.id });
         const state = reducer({
           ...initialState,
           ids: [1],
@@ -127,7 +127,7 @@ describe('LeadReducer', () => {
     describe('REMOVE_ITEM_FAIL action', () => {
       it('should set remove the item from pendingRemoveItems', () => {
         const item = { id: 1, name: 'Mug', price: 4.50 };
-        const action = new itemsActions.RemoveItemFail({ itemId: item.id }, 'error');
+        const action = itemsActions.RemoveItemFail({ itemId: item.id, error: 'error' });
         const state = reducer({
           ...initialState,
           pendingRemoveItems: { 1: item },
@@ -147,7 +147,7 @@ describe('LeadReducer', () => {
           { id: 2, name: 'Hat', price: 14.50 },
         ];
 
-        const action = new itemsActions.RemoveItemSuccess({ itemId: items[0].id });
+        const action = itemsActions.RemoveItemSuccess({ itemId: items[0].id });
         const state = reducer({
           ...initialState,
           ids: [2, 1],

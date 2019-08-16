@@ -37,8 +37,8 @@ describe('ItemsEffects', () => {
       ];
       spyOn(service, 'getItems').and.returnValue(of(items));
 
-      const action = new itemsActions.LoadItems();
-      const completion = new itemsActions.LoadItemsSuccess({ items });
+      const action = itemsActions.LoadItems();
+      const completion = itemsActions.LoadItemsSuccess({ items });
 
 
       actions$ = hot('-a', { a: action });
@@ -50,8 +50,8 @@ describe('ItemsEffects', () => {
       const error = 'some error';
       spyOn(service, 'getItems').and.returnValue(throwError(error));
 
-      const action = new itemsActions.LoadItems();
-      const completion = new itemsActions.LoadItemsFail(error);
+      const action = itemsActions.LoadItems();
+      const completion = itemsActions.LoadItemsFail({ error });
 
       actions$ = hot('-a', { a: action });
       const expected = cold('-c', { c: completion });
@@ -64,8 +64,8 @@ describe('ItemsEffects', () => {
       const item = { id: 1, name: 'Mug', price: 4.50, isRemovalPending: false };
       spyOn(service, 'addItem').and.returnValue(of(item));
 
-      const action = new itemsActions.AddItem({ item: { ...item, id: -1 } });
-      const completion = new itemsActions.AddItemSuccess({ item });
+      const action = itemsActions.AddItem({ item: { ...item, id: -1 } });
+      const completion = itemsActions.AddItemSuccess({ item });
 
       actions$ = hot('-a', { a: action });
       const expected = cold('-c', { c: completion });
@@ -77,8 +77,8 @@ describe('ItemsEffects', () => {
       const error = 'some error';
       spyOn(service, 'addItem').and.returnValue(throwError(error));
 
-      const action = new itemsActions.AddItem({ item: { ...item, id: -1 } });
-      const completion = new itemsActions.AddItemFail(error);
+      const action = itemsActions.AddItem({ item: { ...item, id: -1 } });
+      const completion = itemsActions.AddItemFail({ error });
 
       actions$ = hot('-a', { a: action });
       const expected = cold('-c', { c: completion });
@@ -91,8 +91,8 @@ describe('ItemsEffects', () => {
       const itemId = 10;
       spyOn(service, 'removeItem').and.returnValue(of(itemId));
 
-      const action = new itemsActions.RemoveItem({ itemId });
-      const completion = new itemsActions.RemoveItemSuccess({ itemId });
+      const action = itemsActions.RemoveItem({ itemId });
+      const completion = itemsActions.RemoveItemSuccess({ itemId });
 
       actions$ = hot('-a', { a: action });
       const expected = cold('-c', { c: completion });
@@ -104,8 +104,8 @@ describe('ItemsEffects', () => {
       const error = 'some error';
       spyOn(service, 'removeItem').and.returnValue(throwError(error));
 
-      const action = new itemsActions.RemoveItem({ itemId });
-      const completion = new itemsActions.RemoveItemFail({ itemId }, error);
+      const action = itemsActions.RemoveItem({ itemId });
+      const completion = itemsActions.RemoveItemFail({ itemId, error });
 
       actions$ = hot('-a', { a: action });
       const expected = cold('-c', { c: completion });

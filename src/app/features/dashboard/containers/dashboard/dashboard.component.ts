@@ -17,10 +17,10 @@ export class DashboardComponent {
   itemAdding$ = this.dashboardFacade.itemAdding$;
 
   addItem(item: Item) {
-    this.dashboardFacade.dispatch(new AddItem({ item }));
+    this.dashboardFacade.dispatch(AddItem({ item }));
   }
 
   removeItem(itemId: number) {
-    this.dashboardFacade.dispatch(new RemoveItem({ itemId }));
+    this.dashboardFacade.dispatch(RemoveItem({ itemId }));
   }
 }

@@ -1,42 +1,37 @@
 import { Injectable } from '@angular/core';
 
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, Effect, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, catchError, tap } from 'rxjs/operators';
 
 import { ItemsService } from '../../services/items.service';
-import { LOAD_ITEMS, LoadItemsSuccess, LoadItemsFail, ADD_ITEM, AddItem, AddItemSuccess, AddItemFail, REMOVE_ITEM, RemoveItem, RemoveItemSuccess, RemoveItemFail } from '../actions/items.actions';
+import { LoadItemsSuccess, LoadItemsFail, AddItem, AddItemSuccess, AddItemFail, RemoveItem, RemoveItemSuccess, RemoveItemFail, LoadItems } from '../actions/items.actions';
 
 @Injectable()
 export class ItemsEffects {
   constructor(private actions$:Actions, private itemsService: ItemsService) {}
 
-  @Effect()
-  loadItems$ = this.actions$.pipe(
-    ofType(LOAD_ITEMS),
+  loadItems$ = createEffect(() => this.actions$.pipe(
+    ofType(LoadItems.type),
     switchMap(() => this.itemsService.getItems().pipe(
-      map(items => new LoadItemsSuccess({ items })),
-      catchError(error => of(new LoadItemsFail(error)))
+      map(items => LoadItemsSuccess({ items })),
+      catchError(error => of(LoadItemsFail({ error })))
     ))
-  )
+  ));
 
-  @Effect()
-  addItem$ = this.actions$.pipe(
-    ofType(ADD_ITEM),
-    map((action: AddItem) => action.payload),
+  addItem$ = createEffect(() => this.actions$.pipe(
+    ofType(AddItem.type),
     switchMap(({ item }) => this.itemsService.addItem(item).pipe(
-      map(item => new AddItemSuccess({ item })),
-      catchError(error => of(new AddItemFail(error)))
+      map(item => AddItemSuccess({ item })),
+      catchError(error => of(AddItemFail({ error })))
     ))
-  )
+  ));
 
-  @Effect()
-  removeItem$ = this.actions$.pipe(
-    ofType(REMOVE_ITEM),
-    map((action: RemoveItem) => action.payload),
+  removeItem$ = createEffect(() => this.actions$.pipe(
+    ofType(RemoveItem.type),
     switchMap(({ itemId }) => this.itemsService.removeItem(itemId).pipe(
-      map(itemId => new RemoveItemSuccess({ itemId })),
-      catchError(error => of(new RemoveItemFail({ itemId }, error)))
+      map(itemId => RemoveItemSuccess({ itemId })),
+      catchError(error => of(RemoveItemFail({ itemId, error })))
     ))
-  )
+  ));
 }
